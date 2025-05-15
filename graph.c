@@ -38,7 +38,6 @@ void print_matrix(int** matrix, size_t mtx_size) {
 int** gen_adjacency_matrix(Edge const* edges, size_t edges_count,
                            size_t mtx_size) {
     assert(mtx_size > 1);
-    assert(mtx_size >= edges_count);
     assert(edges != NULL);
 
     int** adjadency_mtx = malloc(sizeof(int*) * mtx_size);

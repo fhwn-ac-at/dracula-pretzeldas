@@ -58,6 +58,9 @@ int** gen_adjacency_matrix(Edge const* edges, size_t edges_count,
     for (int i = 0; i < edges_count && edges[i].weight != -1; i++) {
         Edge const e = edges[i];
 
+        printf("Adding edge #%d with from=%d, to=%d, weight=%d\n", i, e.from,
+               e.to, e.weight);
+
         assert(e.from != e.to);
         assert(e.weight > 0);
         assert(adjadency_mtx[e.from][e.to] == 0);
@@ -66,6 +69,8 @@ int** gen_adjacency_matrix(Edge const* edges, size_t edges_count,
         adjadency_mtx[e.from][e.to] = e.weight;
         adjadency_mtx[e.to][e.from] = -e.weight;
     }
+
+    printf("\n");
 
     return adjadency_mtx;
 }
@@ -81,9 +86,11 @@ void free_mtx(int** mtx, size_t mtx_size) {
 #define VERTEX_COUNT 10
 
 int main(void) {
-    Edge edges[] = {
-        {0, 1, 1}, {1, 2, 3}, {2, 3, 60}, {3, 4, 5}, {5, 2, 42},
-    };
+    Edge edges[] = {{0, 1, 4},  {1, 3, 7},  {2, 5, 2},  {3, 6, 9},  {4, 7, 3},
+                    {5, 8, 6},  {6, 9, 1},  {7, 0, 5},  {8, 2, 8},  {9, 4, 10},
+                    {4, 1, 11}, {6, 2, 14}, {0, 2, 13}, {3, 7, 4},  {4, 5, 9},
+                    {5, 0, 7},  {6, 1, 15}, {7, 8, 3},  {8, 9, 12}, {9, 3, 2},
+                    {0, 6, 8},  {1, 7, 10}, {2, 9, 11}, {4, 8, 14}, {5, 3, 5}};
 
     size_t edge_count = sizeof(edges) / sizeof(Edge);
 

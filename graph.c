@@ -16,9 +16,9 @@ typedef struct Edge {
 #define BLU "\x1b[1;34m"
 #define RED "\x1b[31m"
 
-void print_matrix(size_t size, int matrix[size][size]) {
-    for (int i = 0; i < size; i++) {
-        for (int j = 0; j < size; j++) {
+void print_matrix(int** matrix, size_t mtx_size) {
+    for (int i = 0; i < mtx_size; i++) {
+        for (int j = 0; j < mtx_size; j++) {
             int const val = matrix[i][j];
 
             if (val > 0) printf("%s", BLU);
@@ -35,15 +35,26 @@ void print_matrix(size_t size, int matrix[size][size]) {
     }
 }
 
-#define VERTEX_COUNT 10
-
-void gen_adjacency_matrix(size_t mtx_size, size_t edges_count,
-                          Edge const edges[edges_count],
-                          int adjadency_mtx[mtx_size][mtx_size]) {
+int** gen_adjacency_matrix(Edge const* edges, size_t edges_count,
+                           size_t mtx_size) {
     assert(mtx_size > 1);
     assert(mtx_size >= edges_count);
     assert(edges != NULL);
-    assert(adjadency_mtx != NULL);
+
+    int** adjadency_mtx = malloc(sizeof(int*) * mtx_size);
+    if (adjadency_mtx == NULL) {
+        fprintf(stderr, "[ERROR] Unable to malloc matrix!\n");
+        exit(EXIT_FAILURE);
+    }
+
+    for (int i = 0; i < mtx_size; i++) {
+        adjadency_mtx[i] = calloc(sizeof(int), mtx_size);
+
+        if (adjadency_mtx == NULL) {
+            fprintf(stderr, "[ERROR] Unable to malloc matrix!\n");
+            exit(EXIT_FAILURE);
+        }
+    }
 
     for (int i = 0; i < edges_count && edges[i].weight != -1; i++) {
         Edge const e = edges[i];
@@ -56,18 +67,30 @@ void gen_adjacency_matrix(size_t mtx_size, size_t edges_count,
         adjadency_mtx[e.from][e.to] = e.weight;
         adjadency_mtx[e.to][e.from] = -e.weight;
     }
+
+    return adjadency_mtx;
 }
 
-int main(void) {
-    int adjadency_mtx[VERTEX_COUNT][VERTEX_COUNT] = {0};
+void free_mtx(int** mtx, size_t mtx_size) {
+    for (int i = 0; i < mtx_size; i++) {
+        free(mtx[i]);
+    }
 
+    free(mtx);
+}
+
+#define VERTEX_COUNT 10
+
+int main(void) {
     Edge edges[] = {
         {0, 1, 1}, {1, 2, 3}, {2, 3, 60}, {3, 4, 5}, {5, 2, 42},
     };
 
     size_t edge_count = sizeof(edges) / sizeof(Edge);
 
-    gen_adjacency_matrix(VERTEX_COUNT, edge_count, edges, adjadency_mtx);
+    int** adjadency_mtx = gen_adjacency_matrix(edges, edge_count, VERTEX_COUNT);
 
-    print_matrix(VERTEX_COUNT, adjadency_mtx);
+    print_matrix(adjadency_mtx, VERTEX_COUNT);
+
+    free_mtx(adjadency_mtx, VERTEX_COUNT);
 }

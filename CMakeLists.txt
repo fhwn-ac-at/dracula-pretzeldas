@@ -19,8 +19,10 @@ set(CMAKE_C_COMPILER "/usr/bin/clang")
 # Link each target with other targets or add options, etc.
 
 add_executable(Adjacency adjacency.c)
-
-# Link Math Library
-
 set_property(TARGET Adjacency PROPERTY C_STANDARD 17)
 set_target_properties(Adjacency PROPERTIES OUTPUT_NAME "adjacency.out")
+
+add_executable(PiSearch monte_carlo_pi.c)
+set_property(TARGET PiSearch PROPERTY C_STANDARD 17)
+set_target_properties(PiSearch PROPERTIES OUTPUT_NAME "pi_search.out")
+target_compile_options(PiSearch PRIVATE -O3)

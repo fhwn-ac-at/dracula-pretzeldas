@@ -18,9 +18,9 @@ set(CMAKE_C_COMPILER "/usr/bin/clang")
 
 # Link each target with other targets or add options, etc.
 
-add_executable(Dracula graph.c)
+add_executable(Adjacency adjacency.c)
 
 # Link Math Library
 
-set_property(TARGET Dracula PROPERTY C_STANDARD 17)
-set_target_properties(Dracula PROPERTIES OUTPUT_NAME "drac.out")
+set_property(TARGET Adjacency PROPERTY C_STANDARD 17)
+set_target_properties(Adjacency PROPERTIES OUTPUT_NAME "adjacency.out")

@@ -1,11 +1,9 @@
+# Commonly generated build files 
+build/
 *.out
 
-**/CMakeCache.txt
-**/CMakeFiles/
-**/Makefile
-**/cmake_install.cmake
-*.a
-
+# Custom .vscode environment
 .vscode/
 
-**/core
+# Ignore any core dumps
+**/core*

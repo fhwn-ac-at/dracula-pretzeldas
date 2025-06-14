@@ -22,7 +22,9 @@ typedef struct SpaceNode {
 } SpaceNode;
 
 typedef struct Board {
-    size_t space_count;
+    const size_t space_count;
+    const size_t transition_count;
+    const Transition* const transitions;
     SpaceNode* start;
 } Board;
 
@@ -31,7 +33,7 @@ typedef struct Board {
 // Caller must guarantee that `transitions`
 // contains at least `transition_count` elements.
 Board create_board(size_t size_x, size_t size_y, size_t transition_count,
-                   Transition* transitions);
+                   const Transition* transitions);
 
 // Deallocates all memory associated with the Board and consumes it.
 void free_board(Board board);
@@ -39,4 +41,4 @@ void free_board(Board board);
 // Calculates the type of `transition`.
 // Ladders always lead further up the board,
 // while Snaked always lead towards the start square.
-TransitionType get_transition_type(Transition transition);
+TransitionType get_transition_type(const Transition* const transition);

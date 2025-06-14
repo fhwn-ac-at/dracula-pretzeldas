@@ -21,16 +21,16 @@ SpaceNode* create_node(size_t position) {
 }
 
 void free_nodes(SpaceNode* node) {
-    // TODO: replace recursion to iteration
-    if (node == NULL) {
-        return;
+    SpaceNode* next_node = node;
+    while (next_node != NULL) {
+        SpaceNode* current_node = next_node;
+        next_node = next_node->next;
+        free(current_node);
     }
-    free_nodes(node->next);
-    free(node);
 }
 
-void validate_transitions(Transition* transitions, size_t transition_count,
-                          size_t end_pos) {
+void validate_transitions(const Transition* transitions,
+                          size_t transition_count, size_t end_pos) {
     for (size_t i = 0; i < transition_count; i++) {
         // debugging info
         size_t transition_pos = i + 1;
@@ -122,7 +122,7 @@ void apply_transition(SpaceNode* head, size_t end_pos, Transition transition) {
 }
 
 Board create_board(size_t size_x, size_t size_y, size_t transition_count,
-                   Transition* transitions) {
+                   const Transition* transitions) {
     size_t end_pos = size_x * size_y;
 
     validate_transitions(transitions, transition_count, end_pos);
@@ -145,20 +145,23 @@ Board create_board(size_t size_x, size_t size_y, size_t transition_count,
 
     return (Board){
         .space_count = end_pos,
+        .transition_count = transition_count,
         .start = head,
     };
 }
 
-TransitionType get_transition_type(Transition transition) {
-    // Transition can't lead to itself
-    assert(transition.from != transition.to);
+void free_board(Board board) {
+    free_nodes(board.start);
+}
 
-    int direction = transition.to - transition.from;
+TransitionType get_transition_type(const Transition* const transition) {
+    // Transition can't lead to itself
+    assert(transition->from != transition->to);
+
+    int direction = transition->to - transition->from;
     if (direction > 0) {
         return LADDER;
     } else {
         return SNAKE;
     }
 }
-
-// TODO: impls

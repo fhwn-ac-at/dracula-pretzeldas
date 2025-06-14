@@ -1,6 +1,6 @@
 // Benjamin Eder, 210894
 
-#include "player.h"
+#include "die.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -28,14 +28,6 @@ void free_die(Die die) {
     free(die.outcomes);
 }
 
-Player create_player(Die die) {
-    // player starts off board
-    return (Player){
-        .die = die,
-        .current_position = NULL,
-    };
-}
-
 size_t generate_outcome(const Die* die) {
     size_t weight_total = 0;
     for (size_t i = 0; i < die->side_count; i++) {
@@ -43,7 +35,7 @@ size_t generate_outcome(const Die* die) {
     }
 
     if (weight_total == 0) {
-        fprintf(stderr, "[ERROR] Weights for die total to 0!\n");
+        fprintf(stderr, "[ERROR] Weights for Die total to 0!\n");
         exit(EXIT_FAILURE);
     }
 

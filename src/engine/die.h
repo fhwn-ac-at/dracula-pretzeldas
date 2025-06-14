@@ -3,8 +3,6 @@
 
 #include <stddef.h>
 
-#include "board.h"
-
 typedef struct Roll {
     // the higher the odds, the higher the chance
     // (relative to other weights)
@@ -18,11 +16,6 @@ typedef struct Die {
     Roll* outcomes;
 } Die;
 
-typedef struct Player {
-    Die die;
-    SpaceNode* current_position;
-} Player;
-
 // Creates a new n-sided Die with the specified outcomes.
 // Caller guarantees that `weights` and `values`
 // have at least `sides` elements.
@@ -30,9 +23,6 @@ Die create_die(size_t sides, size_t* weights, size_t* values);
 
 // Frees all memory associated with the Die and consumes it.
 void free_die(Die die);
-
-// Creates a new Player that starts off board at position 0.
-Player create_player(Die die);
 
 // Generates a random roll based on the distributions defined by `die`.
 // Uses `rand` for random numbers

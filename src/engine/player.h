@@ -3,10 +3,12 @@
 
 #include <stddef.h>
 
+#include "board.h"
+
 typedef struct Roll {
     // the higher the odds, the higher the chance
-    // (relative to other odds)
-    size_t odds;
+    // (relative to other weights)
+    size_t weight;
     size_t value;
 } Roll;
 
@@ -18,13 +20,13 @@ typedef struct Die {
 
 typedef struct Player {
     Die die;
-    size_t position;
+    SpaceNode* current_position;
 } Player;
 
 // Creates a new n-sided Die with the specified outcomes.
-// Caller guarantees that `odds_arr` and `value_arr`
+// Caller guarantees that `weights` and `values`
 // have at least `sides` elements.
-Die create_die(size_t sides, size_t* odds_arr, size_t* value_arr);
+Die create_die(size_t sides, size_t* weights, size_t* values);
 
 // Frees all memory associated with the Die and consumes it.
 void free_die(Die die);

@@ -123,6 +123,8 @@ Transition* parse_transitions(char* arg, char* program_name,
         exit(EXIT_FAILURE);
     }
 
+    free(arg_copy);
+
     *transition_count_out = transition_count;
     return transitions;
 };
@@ -189,6 +191,8 @@ Die parse_die(char* arg, char* program_name) {
         print_usage(program_name);
         exit(EXIT_FAILURE);
     }
+
+    free(arg_copy);
 
     return create_die(die_sides, weights, face_values);
 }

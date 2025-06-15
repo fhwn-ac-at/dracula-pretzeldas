@@ -129,7 +129,7 @@ int main(int argc, char* argv[]) {
         float rel_freq_global =
             transition_totals[i] / (float)total_traversals * 100.f;
         if (type == SNAKE) {
-            printf("Snake");
+            printf("Snake ");
 
             rel_freq_same_group =
                 transition_totals[i] / (float)snake_uses * 100.f;
@@ -143,7 +143,7 @@ int main(int argc, char* argv[]) {
             assert(false && "Impossible Transition Type!");
         }
 
-        printf(" from %zu to %zu used %zu times (%.2f%% among ",
+        printf(" from %3zu to %3zu used %zu times (%.2f%% among ",
                transition.from, transition.to, transition_totals[i],
                rel_freq_same_group);
 

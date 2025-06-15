@@ -126,15 +126,18 @@ int main(int argc, char* argv[]) {
         TransitionType type = get_transition_type(&transition);
 
         float rel_freq_same_group;
-        float rel_freq_global = transition_totals[i] / (float)total_traversals;
+        float rel_freq_global =
+            transition_totals[i] / (float)total_traversals * 100.f;
         if (type == SNAKE) {
             printf("Snake");
 
-            rel_freq_same_group = transition_totals[i] / (float)snake_uses;
+            rel_freq_same_group =
+                transition_totals[i] / (float)snake_uses * 100.f;
         } else if (type == LADDER) {
             printf("Ladder");
 
-            rel_freq_same_group = transition_totals[i] / (float)ladder_uses;
+            rel_freq_same_group =
+                transition_totals[i] / (float)ladder_uses * 100.f;
         } else {
             // sanity check
             assert(false && "Impossible Transition Type!");

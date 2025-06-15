@@ -15,6 +15,7 @@ typedef struct CliArgs {
     size_t simulation_count;
     size_t transitions_count;
     Transition* transitions;
+    bool exact_tile_to_win;
 } CliArgs;
 
 // Parses the cli args.

@@ -41,7 +41,8 @@ int main(int argc, char* argv[]) {
 
     for (size_t i = 0; i < args.simulation_count; i++) {
         Engine engine = create_engine(&board, &args.die);
-        stats[i] = simulate_game(engine, args.max_steps, false);
+        stats[i] =
+            simulate_game(engine, args.max_steps, args.exact_tile_to_win);
     }
 
     // sum up stats
@@ -101,7 +102,7 @@ int main(int argc, char* argv[]) {
     printf("Win Rate: %.2f%%\n",
            won_games / (float)args.simulation_count * 100.f);
     if (shortest_path == NULL) {
-        printf("No shortest path found! Board could be impossible.\n");
+        printf("No shortest path found! Board is likely impossible.\n");
         assert(won_games == 0);  // sanity check
     } else {
         printf("Average rolls to win a game: %.2f\n",

@@ -15,7 +15,8 @@
 
 void print_usage(char* program_name) {
     char* usage_str =
-        "Usage: %s [-x board_x] [-y board_y] [-d weights,values;...] "
+        "Usage: %s [-[e]xact] [-x board_x] [-y board_y] "
+        "[-d weights,values;...] "
         "[-t transitions] [-m max_steps] [-n simulation_count]\n";
     fprintf(stderr, usage_str, program_name);
 }
@@ -24,7 +25,7 @@ void print_die_format() {
     fprintf(stderr, "Bad value for -d: %s\n", optarg);
     fprintf(stderr,
             "Die format error, correct format: "
-            "<weight>,<face_value>;<weight>,<face_value>;...\n");
+            "<face_value>,<weight>;<face_value>,<weight>;...\n");
 }
 
 void print_transitions_format() {
@@ -127,7 +128,7 @@ Transition* parse_transitions(char* arg, char* program_name,
 };
 
 Die parse_die(char* arg, char* program_name) {
-    // Die is in format <weight>,<face_value>;...
+    // Die is in format <face_value>,<weight>;...
     size_t arg_len = strlen(arg);
     char* arg_copy = malloc(arg_len + 1);  // add extra for \0
     if (arg_copy == NULL) {
@@ -170,8 +171,8 @@ Die parse_die(char* arg, char* program_name) {
 
         size_t weight_value;
         size_t face_value_val;
-        if (parse_size_t_positive(side_str, &weight_value) != 0 ||
-            parse_size_t_positive(comma + 1, &face_value_val) != 0) {
+        if (parse_size_t_positive(side_str, &face_value_val) != 0 ||
+            parse_size_t_positive(comma + 1, &weight_value) != 0) {
             print_die_format();
             print_usage(program_name);
             exit(EXIT_FAILURE);
@@ -201,9 +202,10 @@ CliArgs parse_cli_args(int argc, char* argv[]) {
         .simulation_count = 1000,
         .transitions_count = 0,
         .transitions = NULL,
+        .exact_tile_to_win = false,
     };
 
-    char* shortopts = "x:y:d:m:n:t:";
+    char* shortopts = "ex:y:d:m:n:t:";
 
     int opt;
 
@@ -253,6 +255,10 @@ CliArgs parse_cli_args(int argc, char* argv[]) {
                     print_usage(argv[0]);
                     exit(EXIT_FAILURE);
                 }
+                break;
+            }
+            case 'e': {
+                args.exact_tile_to_win = true;
                 break;
             }
             default: {

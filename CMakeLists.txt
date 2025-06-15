@@ -25,4 +25,4 @@ add_executable(RattleRoll ${RATTLEROLL_SOURCES})
 set_property(TARGET RattleRoll PROPERTY C_STANDARD 17)
 set_target_properties(RattleRoll PROPERTIES OUTPUT_NAME "rattle_roll")
 
-add_compile_options(-Wall -Wextra -Werror)
+target_compile_options(RattleRoll PRIVATE -Wall -Wextra -Werror)

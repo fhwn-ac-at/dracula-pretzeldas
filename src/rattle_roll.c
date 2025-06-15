@@ -46,7 +46,7 @@ int main(int argc, char* argv[]) {
     }
 
     // sum up stats
-    size_t* transition_totals = malloc(board.transition_count * sizeof(size_t));
+    size_t* transition_totals = calloc(board.transition_count, sizeof(size_t));
     if (transition_totals == NULL) {
         fprintf(stderr, "[ERROR] Unable to allocate transition totals!\n");
         exit(EXIT_FAILURE);

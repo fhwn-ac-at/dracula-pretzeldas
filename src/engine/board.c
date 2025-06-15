@@ -94,7 +94,6 @@ void apply_transition(SpaceNode* head, size_t end_pos, Transition transition) {
     // iterate to start space
     SpaceNode* from_node = head;
     for (size_t from_node_pos = 1; from_node_pos < end_pos; from_node_pos++) {
-        assert(from_node->position == from_node_pos);
         if (from_node->position != transition.from) {
             from_node = from_node->next;
         }
@@ -108,7 +107,6 @@ void apply_transition(SpaceNode* head, size_t end_pos, Transition transition) {
     // iterate to end space
     SpaceNode* to_node = head;
     for (size_t to_node_pos = 1; to_node_pos < end_pos; to_node_pos++) {
-        assert(to_node->position == to_node_pos);
         if (to_node->position != transition.to) {
             to_node = to_node->next;
         }
@@ -148,6 +146,7 @@ Board create_board(size_t size_x, size_t size_y, size_t transition_count,
         .space_count = end_pos,
         .transition_count = transition_count,
         .start = head,
+        .transitions = transitions,
     };
 }
 

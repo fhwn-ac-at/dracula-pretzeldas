@@ -8,41 +8,40 @@
 #include <string.h>
 #include <time.h>
 
+#include "cli_args.h"
 #include "engine/board.h"
 #include "engine/die.h"
 #include "engine/engine.h"
 
-int main(void) {
+int main(int argc, char* argv[]) {
+    CliArgs args = parse_cli_args(argc, argv);
+
     srand(time(NULL));
 
-    // Default D6
-    Die die = create_dn(6);
-
-    Board board = create_board(10, 10, 0, NULL);
-
-    const size_t SIMULATION_COUNT = 1000;
-    const size_t MAX_STEPS = 100;
+    Board board = create_board(args.board_x, args.board_y,
+                               args.transitions_count, args.transitions);
 
     // print simulation args
     printf("Starting Simulations with args:\n");
     printf("- Board Size: %zu\n", board.space_count);
     printf("- Transition Count (Snakes & Ladders): %zu\n",
            board.transition_count);
-    printf("- Die Sides: %zu\n", die.side_count);
+    printf("- Die Sides: %zu\n", args.die.side_count);
     printf("- Die Outcomes: ");
-    for (size_t i = 0; i < die.side_count; i++) {
-        printf("v:%zu,w:%zu ", die.outcomes[i].value, die.outcomes[i].weight);
+    for (size_t i = 0; i < args.die.side_count; i++) {
+        printf("v:%zu,w:%zu ", args.die.outcomes[i].value,
+               args.die.outcomes[i].weight);
     }
     printf("\n");
-    printf("- Max Steps: %zu\n", MAX_STEPS);
-    printf("- Simulations: %zu\n\n", SIMULATION_COUNT);
+    printf("- Max Steps: %zu\n", args.max_steps);
+    printf("- Simulations: %zu\n\n", args.simulation_count);
 
     // run sims
-    Statistics* stats = malloc(SIMULATION_COUNT * sizeof(Statistics));
+    Statistics* stats = malloc(args.simulation_count * sizeof(Statistics));
 
-    for (size_t i = 0; i < SIMULATION_COUNT; i++) {
-        Engine engine = create_engine(&board, &die);
-        stats[i] = simulate_game(engine, MAX_STEPS, false);
+    for (size_t i = 0; i < args.simulation_count; i++) {
+        Engine engine = create_engine(&board, &args.die);
+        stats[i] = simulate_game(engine, args.max_steps, false);
     }
 
     // sum up stats
@@ -56,7 +55,7 @@ int main(void) {
     size_t won_games = 0;
     size_t shortest_path_len = SIZE_MAX;
     size_t* shortest_path = NULL;
-    for (size_t i = 0; i < SIMULATION_COUNT; i++) {
+    for (size_t i = 0; i < args.simulation_count; i++) {
         Statistics stat = stats[i];
         if (stat.was_win) {
             won_games++;
@@ -99,13 +98,14 @@ int main(void) {
     // print stats
 
     printf("=== Common/Roll Stats ===\n");
-    printf("Win Rate: %.2f%%\n", won_games / (float)SIMULATION_COUNT * 100.f);
+    printf("Win Rate: %.2f%%\n",
+           won_games / (float)args.simulation_count * 100.f);
     if (shortest_path == NULL) {
         printf("No shortest path found! Board could be impossible.\n");
         assert(won_games == 0);  // sanity check
     } else {
         printf("Average rolls to win a game: %.2f\n",
-               total_win_rolls / (float)SIMULATION_COUNT);
+               total_win_rolls / (float)args.simulation_count);
         printf("Shortest Win: %zu rolls\n", shortest_path_len);
         printf("Roll Path: \n");
         for (size_t i = 0; i < shortest_path_len; i++) {
@@ -152,19 +152,21 @@ int main(void) {
             assert(false && "Impossible Transition Type!");
         }
 
-        printf(", %.2f%% of total)", rel_freq_global);
+        printf(", %.2f%% of total)\n", rel_freq_global);
     }
 
     // free resources
 
     free(transition_totals);
 
-    for (size_t i = 0; i < SIMULATION_COUNT; i++) {
+    for (size_t i = 0; i < args.simulation_count; i++) {
         free_stats(stats[i]);
     }
-
     free(stats);
+
     free_board(board);
-    free_die(die);
+
+    free(args.transitions);
+    free_die(args.die);
     return 0;
 }

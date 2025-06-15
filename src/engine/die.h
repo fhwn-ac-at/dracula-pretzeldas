@@ -21,6 +21,9 @@ typedef struct Die {
 // have at least `sides` elements.
 Die create_die(size_t sides, size_t* weights, size_t* values);
 
+// Creates a standard uniformly distributed die with `n` sides.
+Die create_dn(size_t n);
+
 // Frees all memory associated with the Die and consumes it.
 void free_die(Die die);
 

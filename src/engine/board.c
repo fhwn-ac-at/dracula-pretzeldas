@@ -15,6 +15,7 @@ SpaceNode* create_node(size_t position) {
     }
 
     node->next = NULL;
+    node->transition_next = NULL;
     node->position = position;
 
     return node;

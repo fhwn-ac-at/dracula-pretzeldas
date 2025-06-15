@@ -93,7 +93,7 @@ Statistics simulate_game(Engine engine, size_t max_rolls,
 
     bool reached_goal = false;
     size_t roll_count;
-    for (roll_count = 1; roll_count <= max_rolls; roll_count++) {
+    for (roll_count = 0; roll_count < max_rolls; roll_count++) {
         size_t roll_result =
             simulate_step(&engine, traversal_counts, exact_tile_for_win);
 

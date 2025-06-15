@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 Die create_die(size_t sides, size_t* odds_arr, size_t* value_arr) {
     Roll* rolls = malloc(sides * sizeof(Roll));
@@ -51,4 +52,16 @@ size_t generate_outcome(const Die* die) {
     fprintf(stderr, "[ERROR] Impossible Die outcome! rand_weight: %zu\n",
             rand_weight);
     exit(EXIT_FAILURE);
+}
+
+Die create_dn(size_t n) {
+    size_t weights[n];
+    size_t values[n];
+
+    for (size_t i = 0; i < n; i++) {
+        weights[i] = 1;
+        values[i] = i + 1;
+    }
+
+    return create_die(n, weights, values);
 }

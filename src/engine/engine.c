@@ -102,6 +102,7 @@ Statistics simulate_game(Engine engine, size_t max_rolls,
         if (engine.player_pos->position == engine.board->space_count) {
             // reached last space
             reached_goal = true;
+            roll_count++;  // off by 1
             break;
         }
     }
